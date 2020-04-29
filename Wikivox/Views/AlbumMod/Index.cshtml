@@ -1,0 +1,90 @@
+﻿
+@model Wikivox.VModels.AlbumPostIndexModel
+@{
+    ViewData["Title"] = "Edit Album";
+}
+@section Styles{
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+}
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            <tr>
+                <td>
+                    <div class="">
+                        <a asp-controller="Main" asp-action="Detail" asp-route-id="@Model.Artist.Id">
+                            <img src=@Model.Artist.PrimaryImage class="img-thumbnail" />
+                            <h1><b>@Model.Artist.ArtistName</b></h1>
+                        </a>
+                    </div>
+                    <h1></h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <em>@Model.Artist.Bio</em>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>@Model.Artist.HomeTown, @Model.Artist.HomeCountry</h5>
+                </td>
+            </tr>
+        </table>
+        <h4><em>@Html.ActionLink("Edit", "Index", "ArtistMod", new { id = @Model.Artist.Id }, null)</em></h4>
+    </div>
+
+    <div class="col-md-6">
+        <h2>@ViewData["Title"]</h2>
+
+        @*Begin Form*@
+        @using (Html.BeginForm("AddAlbum", "AlbumPost", FormMethod.Post))
+        {
+            @*<button type="submit" class="btn-primary btn-lg">Submit</button>*@
+            <h2></h2>
+
+            <div class="">
+                @Html.HiddenFor(a => @Model.Artist.Id)
+
+                <table class="table">
+                    <tr>
+                        <td>@Html.LabelFor(a => Model.Album.Name)</td>
+                        <td><h1>@Html.ValueFor(a => Model.Album.Name)</h1></td>
+
+                        <td>@Html.LabelFor(a => Model.Album.YrReleased)</td>
+                        <td><h1>@Html.ValueFor(a => @Model.Album.YrReleased)</h1></td>
+                    </tr>
+                </table>
+            </div>
+        }
+        @*End Form*@
+
+        @* Upload a photo *@
+        @using (Html.BeginForm("UploadImage", "AlbumMod",
+            FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+
+            <label for="file">Upload Image for <span>@Model.Album.Name</span></label>
+            <input type="file" name="files" id="file" class="btn-primary" /><br><br>
+
+            TempData.Clear();
+            TempData["artistId"] = @Model.Artist.Id.ToString();  //folder path name
+            TempData["resourceId"] = @Model.Album.Id.ToString(); //Image table insert
+            TempData["entityId"] = "1";  //Image table insert, 1 = Album. May get from query on Entity.Name below
+            TempData["entity"] = "albums"; //folder path name
+            TempData.Keep();
+
+            <button type="submit" class="btn-primary btn-lg">Upload</button>
+            <br><br>
+        }
+    </div>
+</div>
+<h2></h2>
+
+<div class="row">
+</div>

@@ -1,0 +1,125 @@
+﻿
+@model Wikivox.VModels.AlbumPostIndexModel
+@{
+    ViewData["Title"] = "New Album";
+}
+@section Styles{
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+}
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            <tr>
+                <td>
+                    <div class="">
+                        <a asp-controller="Main" asp-action="Detail" asp-route-id="@Model.Artist.Id">
+                            <img src=@Model.Artist.PrimaryImage class="img-thumbnail" />
+                            <h1><b>@Model.Artist.ArtistName</b></h1>
+                        </a>
+                    </div>
+                    <h1></h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <em>@Model.Artist.Bio</em>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>@Model.Artist.HomeTown, @Model.Artist.HomeCountry</h5>
+                </td>
+            </tr>
+        </table>
+        <h4><em>@Html.ActionLink("Edit", "Index", "ArtistMod", new { id = @Model.Artist.Id }, null)</em></h4>
+    </div>
+
+    <div class="col-md-6">
+        <h2>New Album</h2>
+
+        @*Begin Form*@
+        @using (Html.BeginForm("AddAlbum", "AlbumPost", FormMethod.Post))
+        {
+            <button type="submit" class="btn-primary btn-lg">Submit</button>
+            <h2></h2>
+
+            <div class="">
+                @Html.HiddenFor(a => @Model.Artist.Id)
+
+                <table class="table">
+                    <tr>
+                        <td>
+                            Title
+                            <input id="albumName" @Html.TextBoxFor(a => Model.Album.Name) 
+                                   >
+                            <button type="button" class="btn btn-primary btn-xs"
+                                    onclick="document.getElementById('albumName').value = ''">
+                                X
+                            </button>
+                        </td>
+
+                        <td>@Html.LabelFor(a => Model.Album.YrReleased)</td>
+                        <td>@Html.EditorFor(a => @Model.Album.YrReleased, @Model.Album.YrReleased)</td>
+                    </tr>
+                </table>
+            </div>
+        }
+        @*End Form*@
+        
+    </div>
+</div>
+<h2></h2>
+
+<div class="row">
+
+    @*<div class="col-md-6">
+        <h2>Members</h2>
+
+        @if (@Model.Musicians.Count() == 0)
+        {
+            <h4 style="text-indent:40px">There are currently no musicians available.</h4>
+        }
+        else
+        {
+            <table class="table">
+                @foreach (var musician in @Model.Musicians)
+                {
+                    <tr>
+                        <td>
+                            <img src=@musician.PrimaryImage alt=@musician.MusicianName class="img-thumbnail" width="80" height="80" />
+                            @Html.ActionLink(@musician.MusicianName, "EditMember", "Main", new { musicianId = @musician.Id }, null)
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        <h4><em>@Html.ActionLink("+ Member", "AddMember", "Main", new { id = @Model.Artist.Id }, null)</em></h4>
+    </div>*@
+
+    @*<div class="col-md-6">
+        <h2>Songs</h2>
+        @if (@Model.Songs.Count() == 0)
+        {
+            <h4 style="text-indent:40px">There are currently no songs available.</h4>
+        }
+        else
+        {
+            <table class="table">
+                @foreach (var song in @Model.Songs)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(@song.Name, "EditSong", "Main", new { songId = @song.Id }, null)</td>
+                        <td>@song.Duration</td>
+
+                    </tr>
+                }
+            </table>
+        }
+        <h4><em>@Html.ActionLink("+ Song", "AddSong", "Main", new { id = @Model.Artist.Id }, null)</em></h4>
+    </div>*@
+</div>

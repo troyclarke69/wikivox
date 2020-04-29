@@ -1,0 +1,95 @@
+﻿
+@model Wikivox.VModels.MainIndexModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section Styles{
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+}
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+}
+
+<div class="row">  
+    <div class="col-md-3">
+        <h4></h4>
+        <span class="badge badge-secondary"><h2>Genres</h2></span>
+        <h4></h4>
+
+        @*Begin Form*@
+        @using (Html.BeginForm("Index", "Main", FormMethod.Post))
+        {
+            @*<button type="submit" class="btn-primary btn-lg">Update</button>*@
+            <h2></h2>
+            <table class="table">
+                @*@foreach (var genre in @Model.Genres)*@
+                @for (int i = 1; i < @Model.GenreListing.Count(); i++)
+                {
+                    @Html.HiddenFor(a => a.GenreListing[i - 1].Id)
+                    <tr>
+                        <td>
+                            @Html.ValueFor(a => a.GenreListing[i - 1].Name)
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(a => a.GenreListing[i - 1].isMarked,
+                                new Dictionary<string, object>{
+                                {"id", "setGenre"},
+                                {"onclick","this.form.submit()"} })
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        @*End Form*@
+    </div>
+
+    <div class="col-md-3">
+        <h4></h4>
+        <span class="badge badge-secondary"><h2>Artists</h2></span>
+        <h4></h4>
+        <h4></h4>
+        <form>
+            <input type="search" name="artist" id="artistName" placeholder="Search Artist ..." onfocus="this.value=''" style="width:200px" />
+            <button type="button" class="btn btn-primary btn-xs"
+                    onclick="document.getElementById('artistName').value = ''">
+                X
+            </button>
+            <button type="button" id="loadArtist" class="btn btn-primary btn-xs">Go</button>
+        </form>
+
+        <h1></h1>
+        <table class="table">
+            @foreach (var artist in @Model.ArtistListing)
+            {
+                <tr>
+                    <td>@Html.ActionLink(@artist.ArtistName, "ArtistFilter", "Main", new { artistId = @artist.Id }, null)</td>
+                </tr>
+            }
+        </table>
+        <h2></h2>
+        <h2>@Html.ActionLink("+ Artist", "Index", "ArtistPost")</h2>
+    </div>
+    <div class="col-md-6">
+        <h2></h2>
+
+        <table class="">
+            <tr>
+                <td>
+                    <div class="">
+                        <a asp-controller="ArtistInfo" asp-action="Index" asp-route-id="@Model.ArtistInfo.Id">
+                            <img src="@Model.ArtistInfo.PrimaryImage" class="img-thumbnail" style="width:600px;height:400px;" />
+                            <h1>@Model.ArtistInfo.ArtistName</h1>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><em>@Model.ArtistInfo.Bio</em></td>
+            </tr>
+            <tr>
+                <td><h4>@Model.ArtistInfo.HomeTown, @Model.ArtistInfo.HomeCountry</h4></td>
+            </tr>
+        </table>
+    </div>
+</div>

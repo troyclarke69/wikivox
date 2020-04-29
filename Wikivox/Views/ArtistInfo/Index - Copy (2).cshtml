@@ -1,0 +1,111 @@
+﻿
+@model Wikivox.VModels.MainDetailModel
+@{
+    ViewData["Title"] = "Artist Info";
+}
+@section Styles{
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+}
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+}
+
+<div class="row">
+
+    <div class="col-md-6 table-bordered">
+        
+        <table class="table">
+            <tr>
+                <td>
+                    <div class="">
+                        <a asp-controller="Main" asp-action="Detail" asp-route-id="@Model.Artist.Id">
+                            <img src=@Model.Artist.PrimaryImage class="img-thumbnail" />
+                            <h1>@Model.Artist.ArtistName</h1>
+                        </a>
+                    </div>
+                    <h1></h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <em>@Model.Artist.Bio</em>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>@Model.Artist.HomeTown, @Model.Artist.HomeCountry</h5>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="col-md-6 table-bordered">
+        <h2></h2>
+        <h2>Albums</h2>
+
+        <table class="table">
+            @foreach (var album in @Model.Albums)
+            {
+                <tr>
+                    <td>
+                        <div class="">
+                            <a asp-controller="Main" asp-action="Detail" asp-route-id="@album.Id">
+                                <img src=@album.PrimaryImage class="img-thumbnail" width="50%" />
+                            </a>
+                        </div>
+                    </td>
+                @*</tr>
+                <tr>*@
+                    <td>
+                        <h4><em>@album.Name</em></h4>
+                    </td>
+                @*</tr>
+                <tr>*@
+                    <td>
+                        <h5><i>@album.YrReleased</i></h5>
+                    </td>
+                </tr>
+            }
+            </table>
+    </div>
+
+    @*<div class="col-md-4 table-bordered">
+        <h2>Albums</h2>
+        <h4></h4>
+
+    </div>*@
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-6 table-bordered">
+        <h2>Members</h2>
+        <h4></h4>
+
+        <table class="table">
+            @foreach (var musician in @Model.Musicians)
+            {
+                <tr>
+                    <td>@Html.ActionLink(@musician.MusicianName, "MusicianFilter", "Main", new { musicianId = @musician.Id }, null)</td>
+                    <td>Instrument</td>
+                    <td>Image</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="col-md-6 table-bordered">
+        <h2>Songs</h2>
+        <h4></h4>
+    </div>
+
+    @*<div class="col-md-4 table-bordered">
+        <h2>Albums</h2>
+        <h4></h4>
+
+    </div>*@
+
+</div>

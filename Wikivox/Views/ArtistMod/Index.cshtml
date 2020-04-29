@@ -1,0 +1,127 @@
+﻿@model Wikivox.VModels.ArtistModIndexModel
+@{
+    ViewData["Title"] = "Edit";
+}
+@section Styles{
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+}
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+}
+
+<h2> @ViewBag.Message</h2>
+
+<div class="row">
+
+    @*Begin Form*@
+    @using (Html.BeginForm("EditArtist", "ArtistMod", FormMethod.Post))
+    {
+        <button type="submit" class="btn-primary btn-lg">Update</button>
+        <h2></h2>
+
+        <div class="col-md-4">
+            @Html.HiddenFor(a => @Model.Artist.Id)
+
+            <a asp-controller="ArtistInfo" asp-action="Index" asp-route-id="@Model.Artist.Id">
+                <img src="@Model.Artist.PrimaryImage" class="img-thumbnail" />
+            </a>
+            <h1></h1>
+
+            <table class="table">
+                <tr>
+                    <td>@Html.LabelFor(a => Model.Artist.ArtistName)</td>
+                    <td>@Html.TextBoxFor(a => @Model.Artist.ArtistName, @Model.Artist.ArtistName)</td>
+                    <td>@Html.ValidationMessageFor(a => Model.Artist.ArtistName)</td>
+                    @*<h1>@Html.ValueFor(a => @Model.Artist.ArtistName)</h1>*@
+                </tr>
+                <tr>
+
+                    <td>@Html.LabelFor(a => Model.Artist.Bio)</td>
+                    <td>@Html.TextAreaFor(a => @Model.Artist.Bio, 10, 19, new { HtmlAttributes = new { } })</td>
+                </tr>
+                <tr>
+
+                    <td>@Html.LabelFor(a => Model.Artist.YrFormed)</td>
+                    <td>@Html.EditorFor(a => @Model.Artist.YrFormed, @Model.Artist.YrFormed)</td>
+                    </tr>
+                <tr>
+
+                    <td>@Html.LabelFor(a => Model.Artist.YrEnded)</td>
+                    @if (@Model.Artist.YrEnded.ToString() != "0")
+                    {
+                        <td>@Html.EditorFor(a => @Model.Artist.YrEnded, @Model.Artist.YrEnded)</td>
+                    }
+                    else
+                    {
+                        <td>@Html.EditorFor(a => @Model.Artist.YrEnded, string.Empty)</td>
+                    }
+
+                </tr>
+                @*<tr>
+
+                        <td>@Html.LabelFor(a => Model.Artist.isActive)</td>
+                        <td>@Html.TextBoxFor(a => @Model.Artist.isActive, @Model.Artist.isActive)</td>
+                    </tr>*@
+                <tr>
+
+                    <td>@Html.LabelFor(a => Model.Artist.HomeTown)</td>
+                    <td>@Html.TextBoxFor(a => @Model.Artist.HomeTown, @Model.Artist.HomeTown)</td>
+                </tr>
+                <tr>
+
+                    <td>@Html.LabelFor(a => Model.Artist.HomeCountry)</td>
+                    <td>@Html.TextBoxFor(a => @Model.Artist.HomeCountry, @Model.Artist.HomeCountry)</td>
+
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-md-4 table-bordered">
+            <h2>Genre</h2>
+            <h4></h4>
+
+            <table class="table">
+                @*@foreach (var genre in @Model.Genres)*@
+                @for (int i = 1; i < @Model.Genres.Count(); i++)
+                {
+                    <tr>
+                        <td>@Html.HiddenFor(a => a.Genres[i - 1].Id)</td>
+                        <td>
+                            @Html.ValueFor(a => a.Genres[i - 1].Name)
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(a => a.Genres[i - 1].isMarked,
+                                new Dictionary<string, object>{
+                                {"id", "setGenre"},
+                                {"onclick","this.form.submit()"} })
+
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+    @*End Form*@
+
+<div class="col-md-4 table-bordered">
+    <h2>Members</h2>
+    <h4></h4>
+
+    <table class="table">
+        @foreach (var musician in @Model.Musicians)
+        {
+            <tr>
+                <td>@Html.HiddenFor(a => @musician.Id)</td>
+                <td>@Html.DisplayFor(b => @musician.MusicianName)</td>
+                <td>Edit | Delete</td>
+            </tr>
+        }
+    </table>
+
+    @Html.ActionLink("+ Member", "Index", "MusicianPost", new { id = @Model.Artist.Id }, null);
+    )
+</div>
+</div>
+
+
